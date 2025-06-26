@@ -1,8 +1,19 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-
+import {
+  CredentialsSignin,
+  type DefaultSession,
+  type NextAuthConfig,
+} from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { v4 as uuid } from "uuid";
+import { encode as jwtEncode } from "next-auth/jwt";
 import { db } from "~/server/db";
+
+class InvalidLoginError extends CredentialsSignin {
+  code = "Invalid identifier or password";
+}
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -30,20 +41,40 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
+const adapter = PrismaAdapter(db);
 export const authConfig = {
   providers: [
-    DiscordProvider,
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    GoogleProvider,
+    Credentials({
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        if (!credentials.email) {
+          throw new InvalidLoginError();
+        }
+
+        const user = await db.user.findUnique({
+          where: { email: credentials.email as string },
+        });
+
+        if (!user?.password) {
+          throw new InvalidLoginError();
+        }
+
+        const valid = await bcrypt.compare(
+          credentials.password as string,
+          user.password,
+        );
+        if (!valid) {
+          throw new InvalidLoginError();
+        }
+        return user;
+      },
+    }),
   ],
-  adapter: PrismaAdapter(db),
+  adapter,
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -52,5 +83,38 @@ export const authConfig = {
         id: user.id,
       },
     }),
+    jwt: async ({ token, account }) => {
+      if (account?.provider === "credentials") {
+        token.credentials = true;
+      }
+      return token;
+    },
+  },
+  pages: {
+    signIn: "/sign-in",
+  },
+  jwt: {
+    encode: async function (params) {
+      if (params.token?.credentials) {
+        const sessionToken = uuid();
+
+        if (!params.token.sub) {
+          throw new Error("No user ID in token");
+        }
+
+        const session = await adapter?.createSession?.({
+          sessionToken: sessionToken,
+          userId: params.token.sub,
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        });
+
+        if (!session) {
+          throw new Error("Failed to create session");
+        }
+
+        return sessionToken;
+      }
+      return jwtEncode(params);
+    },
   },
 } satisfies NextAuthConfig;

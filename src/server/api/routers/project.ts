@@ -37,17 +37,18 @@ export const projectRouter = createTRPCRouter({
         },
         include: {
           Table: {
-            orderBy: { modified: "desc" },
-            take: 1,
+            orderBy: { created: "asc" },
             include: {
               View: {
                 orderBy: { modified: "desc" },
-                take: 1,
               },
             },
           },
         },
       });
+      if (!project) {
+        throw new Error("Project not found");
+      }
       return project;
     }),
 

@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "~/trpc/react";
+
 export type NumberFilter = "<" | ">";
 
 export type TextFilter =
@@ -19,3 +21,7 @@ export type Sort = {
   columnId: number;
   order: "asc" | "desc";
 };
+
+export type Project = RouterOutputs["project"]["get"];
+export type Table = RouterOutputs["table"]["get"];
+export type View = RouterOutputs["view"]["get"];

@@ -29,6 +29,29 @@ export const viewRouter = createTRPCRouter({
       return view;
     }),
 
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const view = await ctx.db.view.findUnique({
+        where: {
+          id: input.id,
+          Table: {
+            Project: {
+              userId: ctx.session.user.id,
+            },
+          },
+        },
+      });
+      if (!view) {
+        throw new Error("View not found");
+      }
+      return view;
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({

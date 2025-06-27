@@ -100,7 +100,33 @@ export const tableRouter = createTRPCRouter({
       });
     }),
 
-  getData: protectedProcedure
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const table = await ctx.db.table.findUnique({
+        where: {
+          id: input.id,
+          Project: {
+            userId: ctx.session.user.id,
+          },
+        },
+        include: {
+          View: {
+            orderBy: { modified: "desc" },
+          },
+        },
+      });
+      if (!table) {
+        throw new Error("Table not found");
+      }
+      return table;
+    }),
+
+  getCells: protectedProcedure
     .input(
       z.object({
         tableId: z.string(),

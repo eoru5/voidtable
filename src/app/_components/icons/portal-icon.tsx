@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React from "react";
+import React, { type SVGProps } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function PortalIcon({
@@ -13,7 +13,7 @@ export default function PortalIcon({
   animate = "never",
   className,
   ...props
-}: React.SVGProps<SVGSVGElement> & {
+}: SVGProps<SVGSVGElement> & {
   secondaryColor?: string;
   backgroundColor?: string;
   animate?: "never" | "always" | "hover";

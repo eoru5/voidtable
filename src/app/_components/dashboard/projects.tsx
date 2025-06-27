@@ -39,6 +39,7 @@ export default function Projects() {
         <Button
           onClick={() => createProject.mutate({ name: "Untitled Project" })}
           className="flex items-center justify-center gap-1"
+          disabled={createProject.isPending}
         >
           <PlusIcon className="size-5" />
           Create

@@ -3,6 +3,9 @@ import { HydrateClient } from "~/trpc/server";
 import { auth } from "~/server/auth";
 import { SessionProvider } from "next-auth/react";
 import type { ViewProps } from "./layout";
+import Project from "~/app/_components/project/project";
+import { Suspense } from "react";
+import LoadingIcon from "~/app/_components/loading-icon";
 
 export default async function Page({ params }: ViewProps) {
   const session = await auth();
@@ -15,8 +18,15 @@ export default async function Page({ params }: ViewProps) {
   return (
     <SessionProvider session={session}>
       <HydrateClient>
-        hihi
-        {/* <Base baseId={baseId} tableId={tableId} viewId={viewId} /> */}
+        <Suspense
+          fallback={
+            <div className="h-screen">
+              <LoadingIcon />
+            </div>
+          }
+        >
+          <Project projectId={projectId} tableId={tableId} viewId={viewId} />
+        </Suspense>
       </HydrateClient>
     </SessionProvider>
   );

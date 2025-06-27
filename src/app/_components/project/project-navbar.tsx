@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import NameLogo from "../name-logo";
 import Link from "next/link";
+import NameLogo from "../name-logo";
 import UserMenu from "../user-menu";
 
-export default function Navbar() {
+export default function ProjectNavbar({ projectName }: { projectName: string }) {
   return (
     <nav className="z-10 flex w-full justify-center bg-zinc-800">
-      <div className="flex w-full max-w-7xl justify-between p-4">
+      <div className="flex w-full items-center justify-between p-4">
         <Link href="/">
-          <NameLogo />
+          <NameLogo text={projectName} size="sm" />
         </Link>
 
         <div className="flex items-center">

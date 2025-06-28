@@ -4,9 +4,9 @@ import type { View } from "~/types/types";
 
 type ViewContextParams = {
   view: View;
-  views: View[];
-  createView: ReturnType<typeof api.view.create.useMutation>;
-  updateView: ReturnType<typeof api.view.update.useMutation>;
+  update: ReturnType<typeof api.view.update.useMutation>;
+  search: string | null;
+  setSearch: (search: string | null) => void;
 };
 
 export const ViewContext = createContext<ViewContextParams | null>(null);

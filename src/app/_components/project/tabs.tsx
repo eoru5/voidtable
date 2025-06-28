@@ -10,7 +10,7 @@ export default function Tabs({ tableId }: { tableId: string }) {
   const { project, createTable } = useProject();
 
   return (
-    <div className="flex overflow-scroll bg-black/20 px-4">
+    <div className="flex overflow-scroll bg-purple-800 px-4">
       {project.Table.map((table, idx) => (
         <Fragment key={idx}>
           <Tab
@@ -20,14 +20,14 @@ export default function Tabs({ tableId }: { tableId: string }) {
             canDelete={project.Table.length > 1}
           />
           <div className="mx-2 py-2">
-            <div className="h-full w-px bg-zinc-600" />
+            <div className="h-full w-px bg-purple-600" />
           </div>
         </Fragment>
       ))}
 
       <Button
         variant="outline"
-        className="rounded-t-md rounded-b-none border-none"
+        className="rounded-t-md rounded-b-none border-none hover:bg-purple-900"
         onClick={() =>
           createTable.mutate({
             projectId: project.id,

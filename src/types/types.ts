@@ -17,11 +17,14 @@ export type Filter = {
   value?: string;
 };
 
+export type Order = "asc" | "desc";
+
 export type Sort = {
   columnId: number;
-  order: "asc" | "desc";
+  order: Order;
 };
 
 export type Project = RouterOutputs["project"]["get"];
 export type Table = RouterOutputs["table"]["get"];
 export type View = RouterOutputs["view"]["get"];
+export type Column = RouterOutputs["column"]["get"];

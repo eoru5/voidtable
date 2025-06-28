@@ -3,11 +3,7 @@ import React, { type SVGProps } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function PortalIcon({
-  height = "24px",
-  width = "24px",
-  viewBox = "0 0 24 24",
   color = "#A861CC",
-  xmlns = "http://www.w3.org/2000/svg",
   secondaryColor = "#5B3493",
   backgroundColor = "#39333D",
   animate = "never",
@@ -20,11 +16,11 @@ export default function PortalIcon({
 }) {
   return (
     <svg
-      height={height}
-      width={width}
-      viewBox={viewBox}
+      height="24px"
+      width="24px"
+      viewBox="0 0 24 24"
       color={color}
-      xmlns={xmlns}
+      xmlns="http://www.w3.org/2000/svg"
       className={twMerge("group", className)}
       {...props}
     >

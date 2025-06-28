@@ -129,7 +129,7 @@ export const tableRouter = createTRPCRouter({
   getCells: protectedProcedure
     .input(
       z.object({
-        tableId: z.string(),
+        id: z.string(),
         viewId: z.string(),
         limit: z.number().min(1).nullish(),
         cursor: z.number().nullish(),
@@ -147,7 +147,7 @@ export const tableRouter = createTRPCRouter({
       const hiddenColumns = view.hiddenColumns;
       const columns = await ctx.db.column.findMany({
         where: {
-          tableId: input.tableId,
+          tableId: input.id,
           id: {
             notIn: hiddenColumns.length > 0 ? hiddenColumns : undefined,
           },
@@ -201,7 +201,7 @@ export const tableRouter = createTRPCRouter({
           )
           .join("\n")}
 
-        where r."tableId" = '${input.tableId}'
+        where r."tableId" = '${input.id}'
         ${filterConditions.length > 0 ? "\nand " + filterConditions.join("and\n") : ""}
 
         order by
@@ -232,13 +232,13 @@ export const tableRouter = createTRPCRouter({
   getColumns: protectedProcedure
     .input(
       z.object({
-        tableId: z.string(),
+        id: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const columns = await ctx.db.column.findMany({
         where: {
-          tableId: input.tableId,
+          tableId: input.id,
           Table: {
             Project: {
               userId: ctx.session.user.id,
@@ -253,13 +253,13 @@ export const tableRouter = createTRPCRouter({
   getViews: protectedProcedure
     .input(
       z.object({
-        tableId: z.string(),
+        id: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const views = await ctx.db.view.findMany({
         orderBy: { created: "asc" },
-        where: { tableId: input.tableId },
+        where: { tableId: input.id },
       });
       return views;
     }),
@@ -282,7 +282,7 @@ export const tableRouter = createTRPCRouter({
   search: protectedProcedure
     .input(
       z.object({
-        tableId: z.string(),
+        id: z.string(),
         viewId: z.string(),
         search: z.string().min(1),
       }),
@@ -299,7 +299,7 @@ export const tableRouter = createTRPCRouter({
       const hiddenColumns = view.hiddenColumns;
       const columns = await ctx.db.column.findMany({
         where: {
-          tableId: input.tableId,
+          tableId: input.id,
           id: {
             notIn: hiddenColumns.length > 0 ? hiddenColumns : undefined,
           },
@@ -362,7 +362,7 @@ export const tableRouter = createTRPCRouter({
           )
           .join("\n")}
 
-        where r."tableId" = '${input.tableId}'
+        where r."tableId" = '${input.id}'
         ${filterConditions.length > 0 ? "\nand " + filterConditions.join("and\n") : ""}
 
         order by

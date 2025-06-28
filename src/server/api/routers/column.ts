@@ -22,6 +22,29 @@ export const columnRouter = createTRPCRouter({
       return column;
     }),
 
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const column = await ctx.db.column.findUnique({
+        where: {
+          id: input.id,
+          Table: {
+            Project: {
+              userId: ctx.session.user.id,
+            },
+          },
+        },
+      });
+      if (!column) {
+        throw new Error("Column not found");
+      }
+      return column;
+    }),
+
   delete: protectedProcedure
     .input(
       z.object({

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { ProjectContext } from "~/hooks/use-project";
 import Tabs from "./tabs";
 import LoadingIcon from "../loading-icon";
-import View from "../view/view";
+import Table from "../table/table";
 
 export default function Project({
   projectId,
@@ -51,7 +51,7 @@ export default function Project({
           <Tabs tableId={tableId} />
 
           <Suspense fallback={<LoadingIcon />}>
-            <View tableId={tableId} viewId={viewId} />
+            <Table tableId={tableId} viewId={viewId} />
           </Suspense>
         </div>
       </div>

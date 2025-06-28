@@ -1,22 +1,14 @@
 import React, { type SVGProps } from "react";
 
-export default function GoogleIcon({
-  height = "24px",
-  width = "24px",
-  version = "1.1",
-  xmlns = "http://www.w3.org/2000/svg",
-  viewBox = "0 0 48 48",
-  xmlnsXlink = "http://www.w3.org/1999/xlink",
-  ...props
-}: SVGProps<SVGSVGElement>) {
+export default function GoogleIcon({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      height={height}
-      width={width}
-      viewBox={viewBox}
-      version={version}
-      xmlnsXlink={xmlnsXlink}
-      xmlns={xmlns}
+      height="24px"
+      width="24px"
+      viewBox="0 0 48 48"
+      version="1.1"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       <path

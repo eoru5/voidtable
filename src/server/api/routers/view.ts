@@ -71,35 +71,11 @@ export const viewRouter = createTRPCRouter({
       });
     }),
 
-  rename: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const view = await ctx.db.view.update({
-        where: {
-          id: input.id,
-          Table: {
-            Project: {
-              userId: ctx.session.user.id,
-            },
-          },
-        },
-        data: {
-          name: input.name,
-          modified: new Date(),
-        },
-      });
-      return view;
-    }),
-
   update: protectedProcedure
     .input(
       z.object({
         id: z.string(),
+        name: z.string().optional(),
         sorts: z.array(z.json()).optional(),
         filters: z.array(z.json()).optional(),
         hiddenColumns: z.array(z.number()).optional(),
@@ -121,9 +97,11 @@ export const viewRouter = createTRPCRouter({
       await ctx.db.view.update({
         where: { id: view.id },
         data: {
+          name: input.name,
           sorts: input.sorts as InputJsonValue[],
           filters: input.filters as InputJsonValue[],
           hiddenColumns: input.hiddenColumns,
+          modified: new Date(),
         },
       });
 

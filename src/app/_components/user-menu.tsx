@@ -30,7 +30,7 @@ export default function UserMenu() {
             height={32}
           />
         ) : (
-          <UserCircleIcon className="size-8 fill-zinc-400" />
+          <UserCircleIcon className="size-8 fill-white/50" />
         )}
       </MenuButton>
 

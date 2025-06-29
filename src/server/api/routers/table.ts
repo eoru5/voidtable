@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { type PrismaClient } from "@prisma/client";
 import { createView } from "./view";
 import { db } from "~/server/db";
-import type { Filter, Sort } from "~/types/types";
+import type { Filter, Row, Sort } from "~/types/types";
 import { createRows } from "./row";
 
 export const getColumns = async (tableId: string) => {
@@ -26,7 +26,7 @@ export const createTable = async (
       name: name,
     },
   });
-  await createView(db, table.id, "Grid View");
+  await createView(db, table.id, "View 1");
 
   await db.column.createManyAndReturn({
     data: [
@@ -213,8 +213,7 @@ export const tableRouter = createTRPCRouter({
         ;
       `;
 
-      const rows =
-        await ctx.db.$queryRawUnsafe<Record<string, string | number>[]>(qry);
+      const rows = await ctx.db.$queryRawUnsafe<Row[]>(qry);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (!input.cursor) {
@@ -371,8 +370,7 @@ export const tableRouter = createTRPCRouter({
         ;
       `;
 
-      const rows =
-        await ctx.db.$queryRawUnsafe<Record<string, string | number>[]>(qry);
+      const rows = await ctx.db.$queryRawUnsafe<Row[]>(qry);
 
       const results: { rIdx: number; rId: number; cId: number }[] = [];
       for (const [idx, r] of rows.entries()) {

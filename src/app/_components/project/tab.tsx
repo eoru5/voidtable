@@ -148,12 +148,10 @@ const MenuTab = ({
   return (
     <Menu>
       {({ open }) => {
-        useEffect(() => {
-          if (open) {
-            setRenaming(false);
-            setDeleting(false);
-          }
-        }, [open]);
+        if (!open) {
+          setRenaming(false);
+          setDeleting(false);
+        }
 
         return (
           <div>

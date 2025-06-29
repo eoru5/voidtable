@@ -29,13 +29,38 @@ export default function Table({
     },
   });
 
+  const updateView = api.view.update.useMutation({
+    onSuccess: async () => {
+      await utils.table.getViews.invalidate();
+      await utils.table.getCells.invalidate();
+    },
+  });
+
   const createColumn = api.column.create.useMutation({
     onSuccess: async () => {
       await utils.table.getColumns.invalidate();
     },
   });
 
+  const deleteColumn = api.column.delete.useMutation({
+    onSuccess: async () => {
+      await utils.table.getColumns.invalidate();
+    },
+  });
+
+  const renameColumn = api.column.rename.useMutation({
+    onSuccess: async () => {
+      await utils.table.getColumns.invalidate();
+    },
+  });
+
   const createRow = api.row.create.useMutation({
+    onSuccess: async () => {
+      await utils.table.getCells.invalidate();
+    },
+  });
+
+  const deleteRow = api.row.delete.useMutation({
     onSuccess: async () => {
       await utils.table.getCells.invalidate();
     },
@@ -54,9 +79,13 @@ export default function Table({
         views,
         columns,
         createView,
+        updateView,
         deleteView,
         createColumn,
+        deleteColumn,
+        renameColumn,
         createRow,
+        deleteRow,
         updateCell,
       }}
     >

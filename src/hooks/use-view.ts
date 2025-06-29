@@ -1,10 +1,8 @@
 import { createContext, useContext } from "react";
-import type { api } from "~/trpc/react";
 import type { View } from "~/types/types";
 
 type ViewContextParams = {
   view: View;
-  update: ReturnType<typeof api.view.update.useMutation>;
   search: string | null;
   setSearch: (search: string | null) => void;
 };

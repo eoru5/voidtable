@@ -62,7 +62,7 @@ export default function SortOption({
           setSelected(value);
         }}
       >
-        <ListboxButton className="w-full">
+        <ListboxButton className="w-full" as="div">
           <Button
             className="flex w-full items-center justify-between gap-2 text-nowrap"
             variant="outline"
@@ -100,7 +100,7 @@ export default function SortOption({
           setSorts(newSorts);
         }}
       >
-        <ListboxButton className="w-full">
+        <ListboxButton className="w-full" as="div">
           <Button
             className="flex w-full items-center justify-between gap-2 text-nowrap"
             variant="outline"
@@ -133,7 +133,8 @@ export default function SortOption({
 
       <Button
         size="sm"
-        className="p-1"
+        className="border-none p-1"
+        variant="outline"
         onClick={() => {
           const newSorts = [...sorts];
           const index = sorts.findIndex((s) => s.columnId === selected.id);

@@ -1,6 +1,6 @@
 "use client";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Button from "../button";
@@ -69,16 +69,13 @@ export default function CardMenu({
   return (
     <Menu>
       {({ open }) => {
-        useEffect(() => {
-          if (open) setDeleting(false);
-        }, [open]);
+        if (!open) {
+          setDeleting(false);
+        }
 
         return (
           <div>
-            <MenuButton
-              onClick={(e) => e.preventDefault()}
-              className="cursor-pointer focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white"
-            >
+            <MenuButton className="cursor-pointer focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white">
               <EllipsisHorizontalIcon className="hover-bg-zinc-700 size-6 rounded-xl transition duration-100 hover:bg-zinc-700" />
             </MenuButton>
 

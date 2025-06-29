@@ -52,7 +52,7 @@ const ActiveSortOptions = ({
             {columns
               .filter((c) => !sorts.some((s) => s.columnId === c.id))
               .map((c) => (
-                <MenuItem>
+                <MenuItem key={c.id}>
                   <Button
                     variant="outline"
                     size="sm"
@@ -111,13 +111,13 @@ const InitialSortOptions = ({
 };
 
 export default function ToolbarSort() {
-  const { columns } = useTable();
-  const { view, update } = useView();
+  const { columns, updateView } = useTable();
+  const { view } = useView();
 
   const sorts = view.sorts as Sort[];
 
   const updateSorts = (sorts: Sort[]) => {
-    update.mutate({ id: view.id, sorts });
+    updateView.mutate({ id: view.id, sorts });
   };
 
   return (

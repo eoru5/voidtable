@@ -46,13 +46,13 @@ export const cellRouter = createTRPCRouter({
 
         if (cell) {
           // cell exists and nonempty input => update cell
-          await ctx.db.cell.update({
+          return await ctx.db.cell.update({
             where: { id: cell.id },
             data: { value: input.value },
           });
         } else {
           // cell doesnt exist and nonempty input => create cell
-          await ctx.db.cell.create({
+          return await ctx.db.cell.create({
             data: {
               columnId: input.columnId,
               rowId: input.rowId,
@@ -63,7 +63,7 @@ export const cellRouter = createTRPCRouter({
       } else {
         if (cell) {
           // cell exists and null input => delete cell
-          await ctx.db.cell.delete({
+          return await ctx.db.cell.delete({
             where: {
               id: cell.id,
             },

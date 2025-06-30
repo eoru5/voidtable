@@ -147,31 +147,25 @@ const MenuTab = ({
 
   return (
     <Menu>
-      {({ open }) => {
-        if (!open) {
+      <MenuButton
+        onClick={() => {
           setRenaming(false);
           setDeleting(false);
-        }
+        }}
+      >
+        <div className="flex cursor-pointer items-center justify-between gap-2 rounded-t-sm bg-zinc-800 px-4 py-2 text-sm text-nowrap focus:outline-1 focus:outline-white focus:outline-none">
+          {table.name}
+          <ChevronDownIcon className="size-4 stroke-3" />
+        </div>
+      </MenuButton>
 
-        return (
-          <div>
-            <MenuButton>
-              <div className="flex cursor-pointer items-center justify-between gap-2 rounded-t-sm bg-zinc-800 px-4 py-2 text-sm text-nowrap focus:outline-1 focus:outline-white focus:outline-none">
-                {table.name}
-                <ChevronDownIcon className="size-4 stroke-3" />
-              </div>
-            </MenuButton>
-
-            <MenuItems
-              anchor="bottom start"
-              transition
-              className="z-20 mt-2 flex origin-top-right flex-col gap-2 rounded-sm border-1 border-zinc-600 bg-zinc-800 p-2 text-sm font-light transition duration-100 ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
-            >
-              <MenuContent />
-            </MenuItems>
-          </div>
-        );
-      }}
+      <MenuItems
+        anchor="bottom start"
+        transition
+        className="z-20 mt-2 flex origin-top-right flex-col gap-2 rounded-sm border-1 border-zinc-600 bg-zinc-800 p-2 text-sm font-light transition duration-100 ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+      >
+        <MenuContent />
+      </MenuItems>
     </Menu>
   );
 };

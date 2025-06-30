@@ -14,7 +14,7 @@ export default function Table({
   const utils = api.useUtils();
 
   const [views] = api.table.getViews.useSuspenseQuery({ id: tableId });
-  const [columns] = api.table.getColumns.useSuspenseQuery({ id: tableId });
+  const [allColumns] = api.table.getColumns.useSuspenseQuery({ id: tableId });
   const [table] = api.table.get.useSuspenseQuery({ id: tableId });
 
   const createView = api.view.create.useMutation({
@@ -32,7 +32,7 @@ export default function Table({
   const updateView = api.view.update.useMutation({
     onSuccess: async () => {
       await utils.table.getViews.invalidate();
-      await utils.table.getCells.invalidate();
+      await utils.table.getInfiniteCells.invalidate();
     },
   });
 
@@ -45,6 +45,7 @@ export default function Table({
   const deleteColumn = api.column.delete.useMutation({
     onSuccess: async () => {
       await utils.table.getColumns.invalidate();
+      await utils.table.getInfiniteCells.invalidate();
     },
   });
 
@@ -56,19 +57,19 @@ export default function Table({
 
   const createRow = api.row.create.useMutation({
     onSuccess: async () => {
-      await utils.table.getCells.invalidate();
+      await utils.table.getInfiniteCells.invalidate();
     },
   });
 
   const deleteRow = api.row.delete.useMutation({
     onSuccess: async () => {
-      await utils.table.getCells.invalidate();
+      await utils.table.getInfiniteCells.invalidate();
     },
   });
 
   const updateCell = api.cell.update.useMutation({
     onSuccess: async () => {
-      await utils.table.getCells.invalidate();
+      await utils.table.getInfiniteCells.invalidate();
     },
   });
 
@@ -77,7 +78,7 @@ export default function Table({
       value={{
         table,
         views,
-        columns,
+        allColumns,
         createView,
         updateView,
         deleteView,

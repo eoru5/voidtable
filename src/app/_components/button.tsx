@@ -4,7 +4,7 @@ import { Button as HeadlessButton } from "@headlessui/react";
 
 const variants = {
   primary: "bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800",
-  outline: "border border-zinc-600 hover:bg-black/15",
+  outline: "border border-zinc-600 hover:bg-white/10",
   error: "bg-rose-600 hover:bg-rose-700 disabled:bg-rose-800",
 };
 

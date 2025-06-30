@@ -14,7 +14,7 @@ export default function TableSidebar() {
   const { view } = useView();
 
   return (
-    <div className="flex h-full max-w-[300px] flex-col justify-between border-r-1 border-zinc-600 bg-zinc-800 p-4 text-sm font-light">
+    <div className="flex h-full w-full max-w-2xs flex-col justify-between border-r-1 border-zinc-600 bg-zinc-800 p-2 text-sm font-light">
       <div className="flex flex-col gap-2 overflow-scroll">
         {views.map((v) => (
           <ViewItem

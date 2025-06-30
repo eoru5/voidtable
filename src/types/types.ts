@@ -1,3 +1,4 @@
+import type { InfiniteData } from "@tanstack/react-query";
 import type { RouterOutputs } from "~/trpc/react";
 
 export const numberFilters = ["<", ">"] as const;
@@ -31,5 +32,8 @@ export type Project = RouterOutputs["project"]["get"];
 export type Table = RouterOutputs["table"]["get"];
 export type View = RouterOutputs["view"]["get"];
 export type Column = RouterOutputs["column"]["get"];
-export type Row = Record<string, string | number>;
-export type SearchResults = RouterOutputs["table"]["search"];
+export type Row = { id: number } & Record<string, string>;
+export type InfiniteRows = InfiniteData<
+  RouterOutputs["table"]["getInfiniteCells"]
+>;
+export type SearchResult = RouterOutputs["table"]["search"]["results"][number];

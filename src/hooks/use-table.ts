@@ -5,7 +5,7 @@ import type { Column, Table, View } from "~/types/types";
 type TableContextParams = {
   table: Table;
   views: View[];
-  columns: Column[];
+  allColumns: Column[];
   createView: ReturnType<typeof api.view.create.useMutation>;
   deleteView: ReturnType<typeof api.view.delete.useMutation>;
   updateView: ReturnType<typeof api.view.update.useMutation>;

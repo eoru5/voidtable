@@ -1,20 +1,35 @@
 "use client";
+
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { useState } from "react";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { useEffect, useRef, useState } from "react";
+import { useTable } from "~/hooks/use-table";
+import {
+  EllipsisVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import Button from "../button";
 
-export default function CardMenu({
+export default function HeaderCellMenu({
   name,
+  columnId,
+  renaming,
   setRenaming,
-  deleteProject,
 }: {
   name: string;
+  columnId: number;
+  renaming: boolean;
   setRenaming: (renaming: boolean) => void;
-  deleteProject: () => void;
 }) {
+  const { deleteColumn } = useTable();
   const [deleting, setDeleting] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (renaming && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [renaming]);
 
   const MenuContent = () => {
     if (deleting) {
@@ -26,7 +41,11 @@ export default function CardMenu({
               <Button size="sm" variant="outline">
                 Cancel
               </Button>
-              <Button onClick={deleteProject} size="sm" variant="error">
+              <Button
+                onClick={() => deleteColumn.mutate({ id: columnId })}
+                size="sm"
+                variant="error"
+              >
                 Delete
               </Button>
             </div>
@@ -68,19 +87,20 @@ export default function CardMenu({
 
   return (
     <Menu>
-      <MenuButton
-        onClick={() => setDeleting(false)}
-        className="cursor-pointer focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white"
-      >
-        <EllipsisHorizontalIcon className="size-6 rounded-xl transition duration-100 hover:bg-zinc-700" />
+      <MenuButton onClick={() => setRenaming(false)}>
+        <EllipsisVerticalIcon className="flex size-5 shrink-0 cursor-pointer text-zinc-400 transition duration-100 hover:text-zinc-300" />
       </MenuButton>
 
       <MenuItems
-        anchor="bottom start"
+        anchor="bottom end"
         transition
         onClick={(e) => e.preventDefault()}
-        className="flex origin-top-right flex-col gap-2 rounded-sm border-1 border-zinc-600 bg-zinc-800 p-2 text-sm transition duration-100 ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+        className="z-20 flex origin-top-right flex-col gap-2 rounded-sm border-1 border-zinc-600 bg-zinc-800 p-2 text-sm transition duration-100 ease-out focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
       >
+        <MenuItem>
+          <div>{name}</div>
+        </MenuItem>
+
         <MenuContent />
       </MenuItems>
     </Menu>

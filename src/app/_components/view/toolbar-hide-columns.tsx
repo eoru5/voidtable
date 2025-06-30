@@ -8,15 +8,8 @@ import { useView } from "~/hooks/use-view";
 import { useTable } from "~/hooks/use-table";
 
 export default function ToolbarHideColumns() {
-  const { columns, updateView } = useTable();
-
-  const { view } = useView();
-
-  const hiddenColumns = view.hiddenColumns;
-
-  const setHiddenColumns = (hiddenColumns: number[]) => {
-    updateView.mutate({ id: view.id, hiddenColumns });
-  };
+  const { allColumns: columns } = useTable();
+  const { hiddenColumns, setHiddenColumns } = useView();
 
   return (
     <Menu>

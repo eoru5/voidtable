@@ -111,14 +111,8 @@ const InitialSortOptions = ({
 };
 
 export default function ToolbarSort() {
-  const { columns, updateView } = useTable();
-  const { view } = useView();
-
-  const sorts = view.sorts as Sort[];
-
-  const updateSorts = (sorts: Sort[]) => {
-    updateView.mutate({ id: view.id, sorts });
-  };
+  const { allColumns: columns } = useTable();
+  const { sorts, setSorts } = useView();
 
   return (
     <Menu>
@@ -126,7 +120,7 @@ export default function ToolbarSort() {
         <div
           className={clsx(
             "flex cursor-pointer items-center gap-1 rounded-sm px-3 py-1 transition duration-200",
-            view.sorts.length > 0 ? "bg-purple-600" : "hover:bg-zinc-700",
+            sorts.length > 0 ? "bg-purple-600" : "hover:bg-zinc-700",
           )}
         >
           <ArrowsUpDownIcon className="size-4 stroke-2 text-white/50" />
@@ -153,10 +147,10 @@ export default function ToolbarSort() {
           <ActiveSortOptions
             columns={columns}
             sorts={sorts}
-            update={updateSorts}
+            update={setSorts}
           />
         ) : (
-          <InitialSortOptions columns={columns} update={updateSorts} />
+          <InitialSortOptions columns={columns} update={setSorts} />
         )}
       </MenuItems>
     </Menu>

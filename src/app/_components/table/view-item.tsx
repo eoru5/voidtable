@@ -56,25 +56,27 @@ export default function ViewItem({
     <Menu>
       <MenuButton>
         <div className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-sm bg-purple-600 px-2 py-1 transition duration-150 hover:bg-purple-900">
-          <TableCellsIcon className="size-5 shrink-0" />
-          {renaming ? (
-            <div
-              className="mr-2 h-full text-sm font-light"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Input
-                ref={inputRef}
-                defaultValue={view.name}
-                className="w-full"
-                onBlur={(e) => {
-                  updateView.mutate({ id: view.id, name: e.target.value });
-                  setRenaming(false);
-                }}
-              />
-            </div>
-          ) : (
-            <div className="grow-0 truncate">{view.name}</div>
-          )}
+          <div className="flex items-center gap-2 overflow-hidden">
+            <TableCellsIcon className="size-5 shrink-0" />
+            {renaming ? (
+              <div
+                className="mr-2 h-full text-sm font-light"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Input
+                  ref={inputRef}
+                  defaultValue={view.name}
+                  className="w-full"
+                  onBlur={(e) => {
+                    updateView.mutate({ id: view.id, name: e.target.value });
+                    setRenaming(false);
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="grow-0 truncate">{view.name}</div>
+            )}
+          </div>
           <ChevronDownIcon className="size-4 shrink-0 stroke-3 text-white/50" />
         </div>
       </MenuButton>

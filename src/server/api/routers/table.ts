@@ -126,7 +126,7 @@ export const tableRouter = createTRPCRouter({
       return table;
     }),
 
-  getCells: protectedProcedure
+  getInfiniteCells: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -185,7 +185,7 @@ export const tableRouter = createTRPCRouter({
       const qry = `
         select
           r.id${columns.length > 0 ? "," : ""}
-          ${columns.map((c) => `f${c.id}.value as f${c.id}`).join(",\n")}
+          ${columns.map((c) => `c${c.id}.value::text as c${c.id}`).join(",\n")}
         from "Row" r
 
         ${columns
@@ -205,7 +205,7 @@ export const tableRouter = createTRPCRouter({
         ${filterConditions.length > 0 ? "\nand " + filterConditions.join("and\n") : ""}
 
         order by
-        ${sorts.map((s) => `f${s.columnId}.value ${s.order}`).join(",\n")}
+        ${sorts.map((s) => `c${s.columnId}.value ${s.order}`).join(",\n")}
           ${sorts.length > 0 ? "," : ""}r.id
           
         limit ${limit + 1}
@@ -339,21 +339,21 @@ export const tableRouter = createTRPCRouter({
              .map(
                (c) => `
             case
-              when f${c.id}.value::text ilike '%${input.search}%' 
-                then f${c.id}.value
+              when c${c.id}.value::text ilike '%${input.search}%' 
+                then c${c.id}.value::text
                 else null
-            end as f${c.id}
+            end as c${c.id}
         `,
              )
              .join(",\n")}
         from "Row" r
 
-        ${columns
+       ${columns
           .map(
             (c) =>
               `
               left join (
-                select "rowId", ${c.type === "Number" ? `value::int` : `value`} as value
+                select "rowId", value
                 from "Cell"
                 where "columnId" = ${c.id}
               ) as c${c.id} on c${c.id}."rowId" = r.id
@@ -365,7 +365,7 @@ export const tableRouter = createTRPCRouter({
         ${filterConditions.length > 0 ? "\nand " + filterConditions.join("and\n") : ""}
 
         order by
-        ${sorts.map((s) => `f${s.columnId}.value ${s.order}`).join(",\n")}
+        ${sorts.map((s) => `c${s.columnId}.value ${s.order}`).join(",\n")}
           ${sorts.length > 0 ? "," : ""}r.id
         ;
       `;
@@ -375,7 +375,7 @@ export const tableRouter = createTRPCRouter({
       const results: { rIdx: number; rId: number; cId: number }[] = [];
       for (const [idx, r] of rows.entries()) {
         for (const c of columns) {
-          if (r[`f${c.id}`]) {
+          if (r[`c${c.id}`]) {
             results.push({
               rIdx: idx,
               rId: r.id !== undefined ? Number(r.id) : -1,
@@ -385,6 +385,9 @@ export const tableRouter = createTRPCRouter({
         }
       }
 
-      return results;
+      return {
+        search: input.search,
+        results,
+      };
     }),
 });

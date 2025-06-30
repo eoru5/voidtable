@@ -22,14 +22,8 @@ export const getDefaultFilter = (column: Column) => {
 };
 
 export default function ToolbarFilter() {
-  const { columns, updateView } = useTable();
-  const { view } = useView();
-
-  const filters = view.filters as Filter[];
-
-  const updateFilters = (filters: Filter[]) => {
-    updateView.mutate({ id: view.id, filters });
-  };
+  const { allColumns: columns } = useTable();
+  const { filters, setFilters } = useView();
 
   const addFilter = () => {
     if (columns.length === 0) return;
@@ -42,7 +36,7 @@ export default function ToolbarFilter() {
         value: null,
       };
 
-      updateFilters([...filters, filter]);
+      setFilters([...filters, filter]);
     }
   };
 
@@ -85,7 +79,7 @@ export default function ToolbarFilter() {
                 filters={filters}
                 filterIdx={idx}
                 columns={columns}
-                setFilters={updateFilters}
+                setFilters={setFilters}
               />
             ))}
 

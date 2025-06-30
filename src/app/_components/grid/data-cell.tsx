@@ -1,55 +1,49 @@
 import { useEffect, useState } from "react";
-import type { Column, Getter, Row, Table } from "@tanstack/react-table";
-import { useTable } from "~/hooks/use-table";
-import type { Row as GridRow } from "~/types/types";
-import type { CellType } from "@prisma/client";
+import { type CellType } from "@prisma/client";
 import clsx from "clsx";
 import { Input } from "@headlessui/react";
+import { toast } from "../toast";
 
 const NUMERIC = /^[-+]?\d*\.?\d*$/;
 
 export const variants = {
-  darker: "bg-yellow-200 ",
-  dark: "bg-yellow-100",
+  selectedResult: "bg-purple-900",
+  searchResult: "bg-purple-600",
   default: "bg-zinc-800",
 };
 
+const validateValue = (value: string, type: CellType) => {
+  switch (type) {
+    case "Text":
+      return true;
+    case "Number":
+      return value === "" || NUMERIC.test(value);
+  }
+};
+
 export default function TableCell({
-  getValue,
-  row,
-  column,
-  table,
-  types,
+  initialValue,
+  updateValue,
+  type,
   variant = "default",
 }: {
-  getValue: Getter<unknown>;
-  row: Row<GridRow>;
-  column: Column<GridRow, unknown>;
-  table: Table<GridRow>;
-  types: Record<string, CellType>;
+  initialValue: string | null;
+  updateValue: (value: string) => void;
+  type: CellType;
   variant?: keyof typeof variants;
 }) {
-  const { updateCell } = useTable();
-
-  const initialValue = row.original[`f${column.id}`] ? getValue() : "";
-
   const [value, setValue] = useState(initialValue);
 
   const onBlur = async () => {
     if (value === null) return;
 
-    const columnId = column.id;
-
     try {
-      const cell = await updateCell.mutateAsync({
-        value: value as string,
-        rowId: Number(row.original.id),
-        columnId: Number(columnId),
+      updateValue(value);
+    } catch {
+      toast.error({
+        title: "Error occured",
+        description: "Cell has been reset",
       });
-
-      table.options.meta?.updateData(row.index, column.id, cell?.value);
-    } catch (error) {
-      console.log("Error occured, resetting value ", error);
       setValue(initialValue);
     }
   };
@@ -61,13 +55,9 @@ export default function TableCell({
   return (
     <Input
       className={clsx("h-full w-full px-4 py-1", variants[variant])}
-      value={value as string}
+      value={value ?? ""}
       onChange={(e) => {
-        if (
-          (types[column.id] === "Number" &&
-            (e.target.value === "" || NUMERIC.test(e.target.value))) ||
-          types[column.id] === "Text"
-        ) {
+        if (validateValue(e.target.value, type)) {
           setValue(e.target.value);
         }
       }}

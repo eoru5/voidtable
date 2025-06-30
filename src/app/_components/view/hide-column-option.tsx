@@ -37,7 +37,7 @@ export default function HideColumnOption({
 
       <Switch
         checked={columnShown}
-        className="group relative flex h-5 w-10 rounded-full bg-zinc-700 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[checked]:bg-purple-600 data-[focus]:outline-1 data-[focus]:outline-white"
+        className="group relative flex h-5 w-10 cursor-pointer rounded-full bg-zinc-700 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[checked]:bg-purple-600 data-[focus]:outline-1 data-[focus]:outline-white"
       >
         <span
           aria-hidden="true"

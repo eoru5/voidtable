@@ -1,29 +1,46 @@
-# Create T3 App
+# Voidtable
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# Overview
 
-## What's next? How do I make an app with this?
+Voidtable is a full-stack web app based on Airtable and built with Next.js, TypeScript, Tailwind, Prisma, and PostgreSQL. It provides a clean spreadsheet-like interface for managing structured data.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
+- In each project, create multiple tables, which can each have several views that define sorting and filtering options.
+- Create text and number type columns.
+- Row virtualisation allowing for hundreds of thousands of rows to be efficiently displayed and sorted/filtered on.
+- Complex backend multi-level sort and filtering.
+- Search feature that is processed in the backend, allowing easy searching through tables with many rows, whilst only fetching as much data as required to load the current search result.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Getting Started
+1. Clone the Repository
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+```base
+git clone https://github.com/eoru-dev/voidtable.git
+cd voidtable
+```
 
-## Learn More
+2. Install Dependencies
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```bash
+npm install
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+3. Configure Environment Variables
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Create a `.env` file and set the required values (detailed in the `.env.example` file):
+```bash
+cp .env.example .env
+```
 
-## How do I deploy this?
+4. Set Up the Database
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+npx prisma db push
+npm prisma generate
+```
+
+5. Run the App
+
+```bash
+npm run dev
+```

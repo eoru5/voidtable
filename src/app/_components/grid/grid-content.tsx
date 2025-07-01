@@ -20,6 +20,7 @@ import PortalIcon from "../icons/portal-icon";
 import AddRowButton from "./add-row-button";
 import AddColumnButton from "./add-column-button";
 import Search from "./search";
+import { api } from "~/trpc/react";
 
 export default function GridContent({
   initialData,
@@ -36,13 +37,10 @@ export default function GridContent({
 }) {
   const { sorts, columns, setSorts, search, searchPos, searchResults } =
     useView();
-  const {
-    table: projectTable,
-    updateCell,
-    createRow,
-    createColumn,
-  } = useTable();
+  const { table: projectTable, createRow, createColumn } = useTable();
   const containerRef = useRef(null);
+
+  const updateCell = api.cell.update.useMutation();
 
   const [data, setData] = useState<Row[]>([]);
 
@@ -92,7 +90,7 @@ export default function GridContent({
       id: c.id.toString(),
       cell: ({ column, getValue, row, table }: CellContext<Row, string>) => (
         <DataCell
-          initialValue={getValue()}
+          initialValue={row.original[`c${column.id}`] ? getValue() : ""}
           updateValue={async (value) => {
             const cell = await updateCell.mutateAsync({
               value,

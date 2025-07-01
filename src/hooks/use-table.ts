@@ -14,7 +14,6 @@ type TableContextParams = {
   renameColumn: ReturnType<typeof api.column.rename.useMutation>;
   createRow: ReturnType<typeof api.row.create.useMutation>;
   deleteRow: ReturnType<typeof api.row.delete.useMutation>;
-  updateCell: ReturnType<typeof api.cell.update.useMutation>;
 };
 
 export const TableContext = createContext<TableContextParams | null>(null);

@@ -21,14 +21,14 @@ const validateValue = (value: string, type: CellType) => {
   }
 };
 
-export default function TableCell({
+export default function DataCell({
   initialValue,
   updateValue,
   type,
   variant = "default",
 }: {
   initialValue: string | null;
-  updateValue: (value: string) => void;
+  updateValue: (value: string) => Promise<void>;
   type: CellType;
   variant?: keyof typeof variants;
 }) {
@@ -38,7 +38,7 @@ export default function TableCell({
     if (value === null) return;
 
     try {
-      updateValue(value);
+      await updateValue(value);
     } catch {
       toast.error({
         title: "Error occured",
@@ -54,7 +54,10 @@ export default function TableCell({
 
   return (
     <Input
-      className={clsx("h-full w-full px-4 py-1", variants[variant])}
+      className={clsx(
+        "h-full w-full px-4 py-1 focus:outline-2 focus:-outline-offset-2 focus:outline-zinc-600 focus:not-data-focus:outline-none",
+        variants[variant],
+      )}
       value={value ?? ""}
       onChange={(e) => {
         if (validateValue(e.target.value, type)) {

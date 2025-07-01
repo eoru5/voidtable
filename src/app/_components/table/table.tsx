@@ -67,12 +67,6 @@ export default function Table({
     },
   });
 
-  const updateCell = api.cell.update.useMutation({
-    onSuccess: async () => {
-      await utils.table.getInfiniteCells.invalidate();
-    },
-  });
-
   return (
     <TableContext
       value={{
@@ -87,7 +81,6 @@ export default function Table({
         renameColumn,
         createRow,
         deleteRow,
-        updateCell,
       }}
     >
       <View viewId={viewId} />
